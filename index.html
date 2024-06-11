@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HearSay - UnMasking the Silence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 20px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .button i {
+            font-size: 18px;
+        }
+
+        #left-button {
+            background: linear-gradient(45deg, #2196f3, #21cbf3);
+        }
+
+        #right-button {
+            background: linear-gradient(45deg, #4caf50, #8bc34a);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HearSay - UnMasking the Silence</h1>
+        <div class="button-container">
+            <a href="http://127.0.0.1:5000" class="button" id="left-button">
+                <i class="fas fa-headphones-alt"></i> HearSay - Audio to Sign Language
+            </a>
+            <a href="http://localhost:3000" class="button" id="right-button">
+                <i class="fas fa-sign-language"></i> Sign Language Detection
+            </a>
+        </div>
+    </div>
+</body>
+</html>

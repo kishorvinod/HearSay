@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>TEXT TO ISL</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href="{{url_for('static',filename='./style.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <!-- <link rel="stylesheet" href="http://vhg.cmp.uea.ac.uk/tech/jas/vhg2021/cwa/cwasa.css" /> -->
+    <!-- <script type="text/javascript" src="http://vhg.cmp.uea.ac.uk/tech/jas/vhg2021/cwa/allcsa.js"></script> -->
+
+    <meta http-equiv="Access-Control-Allow-Methods" content="GET">
+    <link rel="stylesheet"
+    href="{{url_for('static',filename='css/cwasa.css')}}">
+    <script type="text/javascript"
+    src="{{url_for('static',filename='js/allcsa.js')}}"></script>
+    <!-- player css and js files -->
+    <!-- <link rel="stylesheet" href="css/cwasa.css" /> -->
+    <!-- <script type="text/javascript" src="js/allcsa.js"></script> -->
+
+    <script language="javascript">
+        // Initial configuration
+        var initCfg = {
+            "avsbsl" : ["luna", "siggi", "anna", "marc", "francoise"],
+            "avSettings" : { "avList": "avsbsl", "initAv": "marc" }
+        };
+
+        // global variable to store the sigmal list
+        var sigmlList = null;
+
+        // global variable to tell if avatar is ready or not
+        var tuavatarLoaded = false;
+
+        var playerAvailableToPlay = true;
+    </script>
+<!-- <script language="javascript" src="js/animationPlayer.js"></script> -->
+<style type="text/css">
+    body {
+        overflow-y: hidden !important;
+        overflow-x: hidden !important;
+    }
+</style>
+<style>
+    li ,a ,button {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: rgb(223, 223, 223);  
+}
+header {
+    display: flex;
+    justify-content:flex-end ;
+    align-items: center;
+    padding: 30px 10%;
+    background-color: rgb(28, 28, 28);
+}
+.nav_link {
+    list-style: none;
+}
+.nav_link li {
+    display:inline-block ;
+    padding: 0px 20px;
+}
+.nav_link li a{
+    transition: all 0.3s ease 0s;
+}
+.nav_link li a:hover{
+    color:rgb(91, 255, 239) ;
+}
+button{
+    padding: 9px 25px;
+    background-color: rgba(0, 136, 169, 1);
+    border: none;
+    border-radius: 50px;
+    cursor:pointer;
+    transition: all 0.3s ease 0s;
+    margin-left: 20px;
+}
+button:hover{
+    padding: 9px 25px;
+    background-color: rgb(0, 111, 136);
+    border: none;
+    border-radius: 50px;
+    cursor:pointer;
+    transition: all 0.3s ease 0s;
+}
+.logo{
+    font-size: 25px;
+    font-weight: bold;
+    margin-right:auto;
+}
+</style>
+<script type="text/javascript">
+    window.onload = function() {
+      var recordButton = document.getElementById("recordButton");
+      var outputDiv = document.getElementById("outputDiv");
+
+      var recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recordButton.onclick = function() {
+        recognition.start();
+      }
+
+      recognition.onresult = function(event) {
+        var result = event.results[0][0].transcript;
+        outputDiv.innerHTML = result;
+
+        // Send the result to the server using AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/recognize', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+          }
+        };
+        xhr.send('text=' + result);
+      }
+
+      recognition.onerror = function(event) {
+        console.log(event.error);
+      }
+    };
+  </script>
+</head>
+
+<body onload="CWASA.init(initCfg);">
+    
+    <script language="javascript">
+
+// console.log("hello");
+
+function playText(stext) {
+    CWASA.playSiGMLText(stext);
+}
+
+// sets url for sigml
+function setSiGMLURL(sigmlURL) {
+    console.log("hello");
+    var loc = window.location.href;
+    var locDir = loc.substring(0, loc.lastIndexOf('/'));
+    // console.log("SiGML: "+sigmlURL);
+    // console.log("Location Dir: "+locDir);
+    sigmlURL = locDir + "/" + sigmlURL;
+    // console.log("here");
+    console.log("URL "+sigmlURL);
+    document.getElementById("URLText").value = sigmlURL;
+    return sigmlURL;
+}
+// starts the player animation
+function startPlayer(sigmlURL) {
+    sigmlURL = setSiGMLURL(sigmlURL);
+    console.log("URL "+sigmlURL);
+    // Equivalent to click on Sign button
+    CWASA.getLogger("myLog","warn");
+    CWASA.playSiGMLURL(sigmlURL);
+    CWASA.getLogger("myLog","warn");
+}
+function record(){
+        var recognition = new webkitSpeechRecognition();
+        recognition.lang='en-IN';
+
+        recognition.onresult = function(event){
+            console.log(event)
+            document.getElementById('text').value = event.results[0][0].transcript;
+        }
+        recognition.start();
+     }
+</script>
+
+<!-- <div id="speech_recognizer">
+    <a id="speech_recognizer" onclick="startDictation()" style="height: 45%;" class="btn-floating btn-large waves-effect red"><i class="large material-icons">mic</i></a>
+    <p class="text-center" style="margin-top: 15px; font-size: 20px;">Click to Speak</p>
+</div> -->
+
+  
+<div class="main">
+    <header>
+        <a class="logo" href="/http://localhost:8080" style="text-decoration: none;">HearSay - Unmasking the Silence</a>
+
+        <!-- <nav>
+            <ul class="nav_link">
+                <li><a href="/login"style="text-decoration: none;">Try now</a></li>
+                <li><a href="/about"style="text-decoration: none;">About</a></li>
+                <li><a href="/contact"style="text-decoration: none;">Contact</a></li>
+            </ul>
+        </nav>
+        <a class="" href="/login" style="margin-left:10px;"><button>LOGIN</button></a> -->
+    </header>
+    <div class="container">
+        <!-- animation player frame -->
+        <div class="player card"  style="    margin-left: 700px;
+        margin-top: 60px;">
+            <a id="player"></a>
+            <div class="anim"> 
+                <div style="box-sizing: border-box; width: 100%; height: 100%; padding: 15px;" >
+                    <table align="center" style="width:100%; height:100%;" >
+                    <tr align="center">
+                    
+                    <!--================================================================-->
+                    <!-- CWA signing avatar panel 0 -->
+                    <!--================================================================-->
+                    <!-- Replaced by an avatar panel -->
+                    <!--================================================================-->
+                    <td width="100%" height="90%" >
+                        <div class="CWASAAvatar av0" align="center" ></div>
+                    </td>
+                    <!--================================================================-->
+                    
+                    </tr><tr>
+                    
+                    <td align="center" >
+                    
+                    <span class="CWASAAvMenu av0" ></span>
+                    <input type="button" value="Sign" class="bttnPlaySiGMLURL av0" />
+                    <input type="button" value="Stop" class="bttnStop av0" />
+                    <span class="CWASASpeed av0" ></span>
+                    <br/>
+                    
+                    <!-- <span style="font-size: 90%;" >
+                    Sign/Frame:
+                    <input class="txtSF av0" value="0/0" type="text">
+                    Gloss:
+                    <input class="txtGloss av0" value="[none]" type="text">
+                    </span>
+                    <span class="spanInfo av0">
+                        Status:
+                        <input type="text" class="statusExtra av0">
+                        </span> -->
+                    <!--  CachedSiGML URL  -->
+                    <input type="text" id="URLText" class="txtSiGMLURL av0 undisplayed" value="" />
+                    
+                    <script language="javascript">
+                    // Set default sign
+                    // console.log("here");
+                    setSiGMLURL("SignFiles/B.sigml");
+                    
+                    </script>
+                    
+                    </td>
+                    </tr>
+                    
+                    </table>
+                    
+                    </div>
+                    
+            </div>
+            
+        </div>
+        <!-- input for text -->
+        <div class="englishInput">
+            <!-- <button id="start-button">
+                <i class="fas fa-microphone"></i> Start Recording
+              </button> -->
+              <!-- <button id="recordButton">Record</button> -->
+              <form action="" method="post" align="left" id="form" style="    margin-right: 650px;margin-top: -400px;">
+               <label style="font-size: 20px;"> Input : </label>    <input id="text" type="text" name="text" placeholder="" style="width: 375px;
+                            height: 135px;    border-radius: 35px;    font-size: 30px">
+                            <br>
+                            <br>
+
+                            <button type="button" name="button" class="mic" onclick="record()" 
+                            style="margin-left: 105px;
+                            margin-top: 15px;
+                            color: white;
+                            background-color: rgb(0, 111, 136);
+                            border-radius: 25px;
+                            width: 100px;
+                            height: 45px;">Record   </button>
+
+                              <button id = "submit" class="mic"  style="margin-left: 50px;color: white;
+                              background-color: rgb(0, 111, 136);
+                              border-radius: 25px;
+                              width: 100px;
+                              height: 45px;">Submit</button>
+        
+                </form>
+            <!-- <div id="outputDiv"></div>
+            <form method="POST" id= 'form'> -->
+                <!-- Input:<input id="text" type="text" name="text" autocomplete="off">
+                <button id = "submit"  >Submit</button>
+                </form> -->
+            <!-- <button class="btn-primary bttnPlaySiGMLURL av0">Submit</button> -->
+            <!-- <input type="button" value="Sign" class="bttnPlaySiGMLURL av0" /> -->
+            <!-- <a href="/templates/dictionary.html">Dictionary</a> -->
+        </div>
+        <div class="curr_playing" style="    margin-right: 700px;
+        margin-top: -170px;">
+            <p style="font-size: 20px;">Current Word :</p> <p class="curr_word_playing" style="font-size: 30px;"></p>
+        </div>
+        <div class="islOutput" style="    margin-right: 700px;
+        margin-bottom: 70px;
+        margin-top: 20px;">
+          <p style="font-size: 20px;">  ISL text:</p> <p id ="isl_text" style="font-size: 30px;"></p>
+
+        </div>
+        
+        <!-- <div class="test_word_list">
+            Available Words:- 
+            <ul class="test_list">
+               
+            </ul>
+        </div> -->
+       
+    </div>
+</div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/player.js') }}"></script> -->
+
+</body>
+</html>
+
