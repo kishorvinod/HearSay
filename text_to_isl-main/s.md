@@ -30,10 +30,3 @@ Open the browser and go to http://127.0.0.1:5000/  and see the project in action
 
 ## NOTE
 The project uses SIGML files for animating the words and they may not be accurate as making SIGML through HamNoSys is a long and tedious task and whoever made the sigml files which this project uses may not be accurate. 
-
-## Credits
-Word reordering and stanford parser download logic: -  https://github.com/sahilkhoslaa/AudioToSignLanguageConverter
-
-https://github.com/human-divanshu/Text-to-Sign-Language
-
-SIGML player: - https://vh.cmp.uea.ac.uk/index.php/CWA_Signing_Avatars
